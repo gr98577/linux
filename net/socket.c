@@ -102,6 +102,8 @@
 #include <linux/sockios.h>
 #include <net/busy_poll.h>
 #include <linux/errqueue.h>
+#include <linux/portRB.h>
+
 
 /* proto_ops for ipv4 and ipv6 use the same {recv,send}msg function */
 #if IS_ENABLED(CONFIG_INET)
@@ -1641,11 +1643,52 @@ int __sys_bind(int fd, struct sockaddr __user *umyaddr, int addrlen)
 	struct socket *sock;
 	struct sockaddr_storage address;
 	int err, fput_needed;
+	struct sockaddr_in* tmp4 = NULL;
+	struct sockaddr_in6* tmp6 = NULL;
 
 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
 	if (sock) {
 		err = move_addr_to_kernel(umyaddr, addrlen, &address);
 		if (!err) {
+		  
+		  if(address.ss_family == AF_INET){
+		    tmp4 = (struct sockaddr_in*)umyaddr;
+		  }
+		  else if(address.ss_family == AF_INET6){
+		    tmp6 = (struct sockaddr_in*)umyaddr;
+		  }
+		  
+		  if(sock->type == SOCK_STREAM){
+		    if(tmp4){
+		      if(rbSearch(mytree, IPPROTO_TCP, 1, tmp4->sin_port)){
+			return -EACCES;
+		      }
+		    }
+		    else if(tmp6){
+		      if(rbSearch(mytree, IPPROTO_TCP, 1, tmp6->sin_port)){
+			return -EACCES;
+		      }
+		    }
+		  }
+		    
+		  
+		  else if(sock->type == SOCK_DGRAM){
+		    if(tmp4){
+		      if(rbSearch(mytree, IPPROTO_UDP, 1, tmp4->sin_port)){
+			return -EACCES;
+		      }
+		    }
+		  
+		    else if(tmp6){
+		      if(rbSearch(mytree, IPPROTO_UDP, 1, tmp6->sin_port)){
+			return -EACCES;
+		      }
+		    }
+		  }
+		
+		  
+		
+		  
 			err = security_socket_bind(sock,
 						   (struct sockaddr *)&address,
 						   addrlen);
