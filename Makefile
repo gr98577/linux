@@ -2,8 +2,8 @@
 VERSION = 5
 PATCHLEVEL = 2
 SUBLEVEL = 0
-EXTRAVERSION = -rc2
-NAME = Golden Lions
+EXTRAVERSION = -exeeld
+NAME = Golden Lions-exeeld
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
@@ -991,7 +991,7 @@ endif
 PHONY += prepare0
 
 ifeq ($(KBUILD_EXTMOD),)
-core-y		+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
+core-y		+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ pblock/ unblock/
 
 vmlinux-dirs	:= $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
 		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \

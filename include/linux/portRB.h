@@ -1,3 +1,6 @@
+#ifndef PORTRB_H_
+#define PORTRB_H_
+
 #include <linux/rbtree.h>
 #include <stdbool.h>
 
@@ -7,7 +10,7 @@ struct rbNode{
   unsigned short port;
 };
 
-struct rb_root mytree = RB_ROOT;
+
 
 struct rbNode *rbSearch(struct rb_root* root, int proto, int dir, unsigned short port){
 
@@ -37,19 +40,20 @@ bool rbInsert(struct rb_root* root, struct rbNode* data){
     else{return false;}
   }
 
-  rb_link_node(data->node, parent, new);
-  rb_insert_color(data->node, root);
+  rb_link_node(&(data->node), parent, new);
+  rb_insert_color(&(data->node), root);
 
   return true;
   
 }
 
-void rbErase(struct rb_node, *vict, struct rb_root *tree){
-  struct rbNode *data = rbSearch(mytree, vict->proto, vict->dir, vict->dir);
+void rbErase(struct rbNode* dt, struct rb_root *tree){
+  struct rbNode *data = rbSearch(&mytree, dt->proto, dt->dir, dt->port);
 
-  if(data){
-    rbErase(data->node, mytree);
-    //free(data);
-  }
+  /*  if(data){
+    rbErase(&(data), &mytree);
+    free(data);
+    }*/
 
 }
+#endif
