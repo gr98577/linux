@@ -356,9 +356,9 @@
 432	common	fsmount			__x64_sys_fsmount
 433	common	fspick			__x64_sys_fspick
 434	common	pblock			__x64_sys_pblock
-435	common	punblock		__x64_sys_punblock
-436	common	fblock			__x64_sys_fblock
-437	common	funblock		__x64_sys_fblock
+#435	common	punblock		__x64_sys_punblock
+#436	common	fblock			__x64_sys_fblock
+#437	common	funblock		__x64_sys_fblock
 
 #
 # x32-specific system call numbers start at 512 to avoid cache impact

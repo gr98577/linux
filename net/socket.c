@@ -104,7 +104,7 @@
 #include <linux/errqueue.h>
 #include <linux/portRB.h>
 
-struct rb_root mytree = RB_ROOT;
+
 
 
 /* proto_ops for ipv4 and ipv6 use the same {recv,send}msg function */

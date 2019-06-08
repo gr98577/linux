@@ -1400,7 +1400,7 @@ static inline unsigned int ksys_personality(unsigned int personality)
 }
 
 asmlinkage long sys_pblock(int proto, int dir, unsigned short port);
-asmlinkage long sys_punblock(int proto, int dir, unsigned short port);
+//asmlinkage long sys_punblock(int proto, int dir, unsigned short port);
 //asmlinkage long sys_fblock(char* fname);
 //asmlinkage long sys_funblock(char* fname);
 
