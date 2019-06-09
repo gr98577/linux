@@ -13,8 +13,7 @@ SYSCALL_DEFINE3(pblock, int, proto, int, dir, unsigned short, port){
     rbInsert(&mytree, tmp);
   }
   else{
-    //    printf("Port w/ direction and protocol already exist in block list.\n");
+    printk("Already in there.");
     return -1;
   }
-  
 }

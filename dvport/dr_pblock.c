@@ -7,30 +7,36 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <errno.h>
-#include <linux/portRB.h>
+#include <linux/socket.h>
+
 
 #define __NR_pblock 434
 
-long pblock(int proto, int dir, unsigned short port){
+long pblock_syscall(int proto, int dir, unsigned short port){
   return syscall(__NR_pblock, proto, dir, port);
 }
 
 int main(int argc, char* argv[]){
+  
   if(geteuid() != 0){
     perror("Insufficient privileges.\n");
     return -EACCES;
   }
   int proto, dir;
   unsigned short port;
-
+  const char* tcp = "tcp";
+  const char* udp = "udp";
+  const char* in = "in";
+  const char* out = "out";
   
   if(argc != 4){
     perror("Proper input: pblock protocol[tcp/udp] dir[in/out] port\n");
     return -1;
   }
   
-  if(argv[1] == "tcp" || argv[1] == "udp"){
-    if(argv[1] == "tcp")  proto = IPPROTO_TCP;
+  
+  if(strcmp(argv[1],tcp) == 0 || strcmp(argv[1],udp) == 0){
+    if(strcmp(argv[1],tcp) == 0)  proto = IPPROTO_TCP;
     else proto = IPPROTO_UDP;
   }
   else{
@@ -38,8 +44,8 @@ int main(int argc, char* argv[]){
     return -EINVAL;
   }
   
-  if(argv[2] == "in" || argv[2] == "out"){
-    if(argv[2] == "in") dir = 1;
+  if(strcmp(argv[2],in) == 0 || strcmp(argv[2],out) == 0){
+    if(strcmp(argv[2],in)) dir = 1;
     else dir = 0;
   }
   else{
@@ -55,14 +61,7 @@ int main(int argc, char* argv[]){
     port = atoi(argv[3]);
   }
 
-  if(!rbSearch(proto, dir, port)){
-    rbInsert(&mytree, proto, dir, port);
-    return 0;
-  }
-  else{
-    perror("Entry already exists in list.\n");
-    return -1;
-  }
+  pblock_syscall(proto, dir, port);
   
   
 }

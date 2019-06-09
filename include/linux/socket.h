@@ -9,6 +9,7 @@
 #include <linux/types.h>		/* pid_t			*/
 #include <linux/compiler.h>		/* __user			*/
 #include <uapi/linux/socket.h>
+#include <linux/portRB.h>
 
 struct pid;
 struct cred;
